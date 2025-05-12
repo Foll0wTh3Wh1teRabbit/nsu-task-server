@@ -43,5 +43,5 @@ jobs:
       - name: Deploy with Docker Compose
         run: |
           ssh root@207.174.30.105 "cd /root/nsu-task-server && \
-          gradle build -x test && \
+          ./gradlew build -x test && \
           docker-compose -f docker-compose-production.yml down && docker-compose -f docker-compose-production.yml up -d"
