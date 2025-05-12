@@ -31,7 +31,7 @@ jobs:
           echo "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
       - name: Копирование файлов на сервер
         run: |
-          rsync -avz --exclude='.git/' . ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/nsu-task-server
+          rsync -avz --exclude='.git/' . ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/${{ secrets.SSH_USER }}/nsu-task-server
       - name: Деплой на сервере
         run: |
           ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
