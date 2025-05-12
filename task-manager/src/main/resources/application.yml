@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+    hikari:
+      username: ${POSTGRES_USER}
+      password: ${POSTGRES_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: {DDL_AUTO_MODE}
+server:
+  port: ${MANAGER_PORT}

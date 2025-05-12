@@ -1,0 +1,91 @@
+version: '3.3'
+
+services:
+  nginx:
+    container_name: nginx
+    image: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "9090:80"
+    env_file:
+      - .env.staging
+    depends_on:
+      - task-manager-1
+      - task-manager-2
+
+  task-planner-1:
+    container_name: task-planner-1
+    build:
+      context: task-planner
+      dockerfile: Dockerfile
+    env_file:
+      - .env.staging
+    depends_on:
+      - rabbitmq
+      - postgres
+  task-planner-2:
+    container_name: task-planner-2
+    build:
+      context: task-planner
+      dockerfile: Dockerfile
+    env_file:
+      - .env.staging
+    depends_on:
+      - rabbitmq
+      - postgres
+  task-planner-3:
+    container_name: task-planner-3
+    build:
+      context: task-planner
+      dockerfile: Dockerfile
+    env_file:
+      - .env.staging
+    depends_on:
+      - rabbitmq
+      - postgres
+  task-planner-4:
+    container_name: task-planner-4
+    build:
+      context: task-planner
+      dockerfile: Dockerfile
+    env_file:
+      - .env.staging
+    depends_on:
+      - rabbitmq
+      - postgres
+
+  task-manager-1:
+    container_name: task-manager-1
+    build:
+      context: task-manager
+      dockerfile: Dockerfile
+    env_file:
+      - .env.staging
+    depends_on:
+      - rabbitmq
+      - postgres
+  task-manager-2:
+    container_name: task-manager-2
+    build:
+      context: task-manager
+      dockerfile: Dockerfile
+    env_file:
+      - .env.staging
+    depends_on:
+      - rabbitmq
+      - postgres
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3.10.7-management
+    env_file:
+      - .env.staging
+    ports:
+      - "15672:15672"
+
+  postgres:
+    container_name: postgres
+    image: postgres
+    env_file:
+      - .env.staging

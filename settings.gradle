@@ -1,0 +1,6 @@
+rootProject.name = 'nsu-task-server'
+
+include 'common'
+include 'task-manager'
+include 'task-planner'
+

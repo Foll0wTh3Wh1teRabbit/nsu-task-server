@@ -1,0 +1,18 @@
+version: '3.3'
+
+services:
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3.10.7-management
+    env_file:
+      - .env.dev
+    ports:
+      - "15672:15672"
+
+  postgres:
+    container_name: postgres
+    image: postgres
+    env_file:
+      - .env.dev
+    ports:
+      - "5432:5432"
