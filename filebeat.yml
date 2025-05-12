@@ -1,17 +1,27 @@
-filebeat.inputs:
-  - type: container
-    enabled: true
-    paths:
-      - /var/lib/docker/containers/*/*.log
-    processors:
-      - add_docker_metadata: ~
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      hints.enabled: true
+      templates:
+        - condition:
+            equals:
+              docker.container.labels.logging: "enabled"
+          config:
+            - type: container
+              paths:
+                - /var/lib/docker/containers/${data.docker.container.id}/*.log
+              multiline.pattern: '^\d{4}-\d{2}-\d{2}'  # для Spring Boot логов
+              multiline.negate: true
+              multiline.match: after
+              processors:
+                - add_docker_metadata: ~
 
 output.elasticsearch:
-  hosts: ["elasticsearch:9200"]
+  hosts: ["http://elasticsearch:9200"]
   index: "spring-logs-%{+yyyy.MM.dd}"
+
+setup.template.name: "spring-logs"
+setup.template.pattern: "spring-logs-*"
 
 setup.kibana:
   host: "kibana:5601"
-
-logging:
-  level: info
