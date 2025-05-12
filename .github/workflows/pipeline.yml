@@ -38,10 +38,10 @@ jobs:
 
       - name: Copy project files to remote server
         run: |
-          rsync -avz --exclude='.git/' . root@205.174.30.105:/root/task-manager
+          rsync -avz --exclude='.git/' . root@207.174.30.105:/root/nsu-task-server
 
       - name: Deploy with Docker Compose
         run: |
-          ssh root@205.174.30.105 "cd /root/task-manager && \
+          ssh root@207.174.30.105 "cd /root/nsu-task-server && \
           gradle build -x test && \
           docker-compose -f docker-compose-production.yml down && docker-compose -f docker-compose-production.yml up -d"
