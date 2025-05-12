@@ -135,6 +135,8 @@ services:
     image: postgres
     env_file:
       - .env.staging
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
 volumes:
   esdata:
