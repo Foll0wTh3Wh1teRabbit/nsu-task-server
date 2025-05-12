@@ -21,6 +21,8 @@ services:
       dockerfile: Dockerfile
     env_file:
       - ~/.env.prod
+    labels:
+      logging: "enabled"
     depends_on:
       - rabbitmq
       - postgres
@@ -31,6 +33,8 @@ services:
       dockerfile: Dockerfile
     env_file:
       - ~/.env.prod
+    labels:
+      logging: "enabled"
     depends_on:
       - rabbitmq
       - postgres
@@ -41,6 +45,8 @@ services:
       dockerfile: Dockerfile
     env_file:
       - ~/.env.prod
+    labels:
+      logging: "enabled"
     depends_on:
       - rabbitmq
       - postgres
@@ -51,6 +57,8 @@ services:
       dockerfile: Dockerfile
     env_file:
       - ~/.env.prod
+    labels:
+      logging: "enabled"
     depends_on:
       - rabbitmq
       - postgres
@@ -62,6 +70,8 @@ services:
       dockerfile: Dockerfile
     env_file:
       - ~/.env.prod
+    labels:
+      logging: "enabled"
     depends_on:
       - rabbitmq
       - postgres
@@ -72,6 +82,8 @@ services:
       dockerfile: Dockerfile
     env_file:
       - ~/.env.prod
+    labels:
+      logging: "enabled"
     depends_on:
       - rabbitmq
       - postgres
