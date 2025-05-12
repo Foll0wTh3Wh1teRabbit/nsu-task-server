@@ -42,6 +42,6 @@ jobs:
 
       - name: Deploy with Docker Compose
         run: |
-          ssh root@185.121.134.83 "cd /root/task-manager && \
+          ssh root@205.174.30.105 "cd /root/task-manager && \
           gradle build -x test && \
           docker-compose -f docker-compose-production.yml down && docker-compose -f docker-compose-production.yml up -d"
