@@ -1,40 +1,47 @@
-name: CI/CD Gradle & Deploy
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - name: Установить JDK
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: 21
           distribution: 'temurin'
-      - name: Дать права на выполнение gradlew
-        run: chmod +x gradlew
-      - name: Сборка и тестирование Gradle
-        run: ./gradlew clean build
+
+      - name: Run tests
+        run: gradle test
 
   deploy:
-    needs: build
+    needs: test
     runs-on: ubuntu-latest
+
     steps:
-      - name: Настройка SSH
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+
+      - name: Copy project files to remote server
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          echo "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
-      - name: Копирование файлов на сервер
+          rsync -avz --exclude='.git/' . root@205.174.30.105:/root/task-manager
+
+      - name: Deploy with Docker Compose
         run: |
-          rsync -avz --exclude='.git/' . ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/${{ secrets.SSH_USER }}/nsu-task-server
-      - name: Деплой на сервере
-        run: |
-          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
-            "cd /${{ secrets.SSH_USER }}/nsu-task-server && \
-             docker-compose -f docker-compose-production.yml pull && \
-             docker-compose -f docker-compose-production.yml up -d"
+          ssh root@185.121.134.83 "cd /root/task-manager && \
+          gradle build -x test && \
+          docker-compose -f docker-compose-production.yml down && docker-compose -f docker-compose-production.yml up -d"
