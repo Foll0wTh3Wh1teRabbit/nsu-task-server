@@ -34,7 +34,7 @@ jobs:
       - name: Make Gradle Wrapper executable
         run: chmod +x ./gradlew
 
-      - name: Run tests
+      - name: Build jars
         run: ./gradlew clean build -x test
 
       - name: Install SSH key
