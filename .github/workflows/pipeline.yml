@@ -1,47 +1,39 @@
-name: CI/CD Pipeline
+name: CI/CD Gradle & Deploy
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up JDK
+      - uses: actions/checkout@v3
+      - name: Установить JDK
         uses: actions/setup-java@v3
         with:
-          java-version: 21
-          distribution: 'temurin'
-
-      - name: Run tests
-        run: gradle test
+          java-version: '11'
+      - name: Дать права на выполнение gradlew
+        run: chmod +x gradlew
+      - name: Сборка и тестирование Gradle
+        run: ./gradlew clean build
 
   deploy:
-    needs: test
+    needs: build
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Install SSH key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          known_hosts: ${{ secrets.KNOWN_HOSTS }}
-
-      - name: Copy project files to remote server
+      - name: Настройка SSH
         run: |
-          rsync -avz --exclude='.git/' . root@207.174.30.105:/task-manager
-
-      - name: Deploy with Docker Compose
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          echo "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+      - name: Копирование файлов на сервер
         run: |
-          ssh root@207.174.30.105 "cd /nsu-task-server && \
-          gradle build -x test && \
-          docker-compose -f docker-compose-production.yml down && docker-compose -f docker-compose-production.yml up -d"
+          scp -i ~/.ssh/id_rsa -r ./* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/app/
+      - name: Деплой на сервере
+        run: |
+          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            "cd /home/${{ secrets.SSH_USER }}/app && \
+             docker-compose -f docker-compose-production.yml pull && \
+             docker-compose -f docker-compose-production.yml up -d"
