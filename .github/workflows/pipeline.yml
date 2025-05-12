@@ -8,7 +8,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -17,15 +16,17 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 21
-          distribution: 'temurin'
+          distribution: temurin
+
+      - name: Make Gradle Wrapper executable
+        run: chmod +x ./gradlew
 
       - name: Run tests
-        run: gradle test
+        run: ./gradlew clean build
 
   deploy:
     needs: test
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -38,10 +39,12 @@ jobs:
 
       - name: Copy project files to remote server
         run: |
-          rsync -avz --exclude='.git/' . root@207.174.30.105:/root/nsu-task-server
+          rsync -avz --delete --exclude='.git/' ./ root@207.174.30.105:/root/nsu-task-server
 
       - name: Deploy with Docker Compose
         run: |
-          ssh root@207.174.30.105 "cd /root/nsu-task-server && \
-          ./gradlew build -x test && \
-          docker-compose -f docker-compose-production.yml down && docker-compose -f docker-compose-production.yml up -d"
+          ssh root@207.174.30.105 << 'EOF'
+            cd /root/nsu-task-server
+            docker-compose -f docker-compose-production.yml pull
+            docker-compose -f docker-compose-production.yml up -d --build
+          EOF
