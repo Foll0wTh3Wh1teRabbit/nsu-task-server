@@ -31,10 +31,10 @@ jobs:
           echo "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
       - name: Копирование файлов на сервер
         run: |
-          scp -i ~/.ssh/id_rsa -r ./* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/${{ secrets.SSH_USER }}/app/
+          rsync -avz --exclude='.git/' . ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/nsu-task-server
       - name: Деплой на сервере
         run: |
           ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
-            "cd /${{ secrets.SSH_USER }}/app && \
+            "cd /${{ secrets.SSH_USER }}/nsu-task-server && \
              docker-compose -f docker-compose-production.yml pull && \
              docker-compose -f docker-compose-production.yml up -d"
