@@ -43,8 +43,6 @@ jobs:
 
       - name: Deploy with Docker Compose
         run: |
-          ssh root@207.174.30.105 << 'EOF'
-            cd /root/nsu-task-server
-            docker-compose -f docker-compose-production.yml pull
-            docker-compose -f docker-compose-production.yml up -d --build
-          EOF
+          ssh root@207.174.30.105 "cd /root/nsu-task-server && \
+            docker-compose -f docker-compose-production.yml pull && \
+            docker-compose -f docker-compose-production.yml up -d --build"
