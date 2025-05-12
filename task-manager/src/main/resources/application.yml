@@ -1,3 +1,8 @@
+application:
+  security:
+    token:
+      signing-key: ${TOKEN_KEY}
+
 spring:
   datasource:
     url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}

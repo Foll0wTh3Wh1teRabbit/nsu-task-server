@@ -6,3 +6,21 @@ spring:
       password: ${POSTGRES_PASSWORD}
 server:
   port: ${PLANNER_PORT}
+management:
+  endpoints:
+    prometheus:
+      enabled: true
+    web:
+      exposure:
+        include: ["health","info","prometheus"]
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+    tags:
+      application: ${spring.application.name}
+    web:
+      server:
+        request:
+          autotime:
+            enabled: true
