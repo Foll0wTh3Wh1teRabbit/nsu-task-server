@@ -69,10 +69,6 @@ services:
     networks:
       - nsu-task-net
 
-volumes:
-  esdata:
-  postgres_data:
-
 networks:
   nsu-task-net:
     external: true
