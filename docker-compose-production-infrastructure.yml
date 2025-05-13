@@ -77,7 +77,7 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=secret123
     volumes:
       - grafana-data:/var/lib/grafana
-      - grafana:/etc/grafana/provisioning/datasources
+      - ./grafana:/etc/grafana/provisioning/datasources
     depends_on:
       - elasticsearch
     networks:
