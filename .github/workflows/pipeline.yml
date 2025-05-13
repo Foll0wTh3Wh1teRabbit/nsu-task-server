@@ -45,11 +45,11 @@ jobs:
 
       - name: Copy project files to remote server
         run: |
-          rsync -avz --delete --exclude='.git/' ./ root@207.174.30.105:/root/nsu-task-server
+          rsync -avz --delete --exclude='.git/' ./ root@194.58.46.63:/root/nsu-task-server
 
       - name: Deploy with Docker Compose
         run: |
-          ssh root@207.174.30.105 "cd /root/nsu-task-server && \
-            docker-compose -f docker-compose-production.yml down && \
-            docker-compose -f docker-compose-production.yml pull && \
-            docker-compose -f docker-compose-production.yml up -d --build"
+          ssh root@194.58.46.63 "cd /root/nsu-task-server && \
+            docker-compose -f docker-compose-production-services.yml down -v && \
+            docker-compose -f docker-compose-production-services.yml pull && \
+            docker-compose -f docker-compose-production-services.yml up -d --build"
