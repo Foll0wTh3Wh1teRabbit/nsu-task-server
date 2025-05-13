@@ -68,6 +68,21 @@ services:
     networks:
       - nsu-task-net
 
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:7.17.13
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=secret123
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - grafana:/etc/grafana/provisioning/datasources
+    depends_on:
+      - elasticsearch
+    networks:
+      - nsu-task-net
+
   rabbitmq:
     container_name: rabbitmq
     image: rabbitmq:3.10.7-management
@@ -91,6 +106,7 @@ services:
 volumes:
   esdata:
   postgres_data:
+  grafana-data:
 
 networks:
   nsu-task-net:
