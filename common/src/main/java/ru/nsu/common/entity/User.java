@@ -1,5 +1,8 @@
 package ru.nsu.common.entity;
 
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import ru.nsu.common.enums.UserStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,6 +23,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -45,9 +49,19 @@ public class User implements UserDetails {
     @Column(name = "status", nullable = false)
     private UserStatus status;
 
-    //push token
+    @OneToMany()
+    private Set<PushToken> pushTokens;
 
-    //project
+    @ManyToMany()
+    private Set<Project> projects;
+
+
+    @PrePersist
+    public void initDefaultProject() {
+        String defaultProjectName = "Список задач";
+
+        this.projects
+    }
 
 
     @Override

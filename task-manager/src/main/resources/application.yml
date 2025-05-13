@@ -11,7 +11,7 @@ spring:
       password: ${POSTGRES_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: {DDL_AUTO_MODE}
+      ddl-auto: update
 server:
   port: ${MANAGER_PORT}
 

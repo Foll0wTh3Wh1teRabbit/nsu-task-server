@@ -30,10 +30,9 @@ public class ShortTtlJwtAuthenticationFilter extends OncePerRequestFilter {
     private final UserDetailsService customUserDetailsService;
 
     @Override
-    protected void doFilterInternal(
-        @NonNull HttpServletRequest request,
-        @NonNull HttpServletResponse response,
-        @NonNull FilterChain filterChain
+    protected void doFilterInternal(@NonNull HttpServletRequest request,
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
         String jwt = Optional.of(request)
             .map(req -> req.getParameter(Parameters.PRINCIPAL_PARAM))
