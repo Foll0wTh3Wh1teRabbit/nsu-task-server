@@ -5,6 +5,9 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class Path {
 
+    public final String ACTUATOR = "/actuator/**";
+
+
     public final String AUTH = "/auth";
 
     public final String AUTH_REGISTER_ENDPOINT = AUTH + "/register";

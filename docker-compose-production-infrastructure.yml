@@ -2,20 +2,21 @@ version: '3.3'
 
 services:
   nginx:
-    container_name: nginx
-    image: nginx
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     restart: on-failure
     command: >
       sh -c '
-        echo "Waiting for task-managers";
-        until nc -z task-manager-1 8080; do
-          echo "still waiting...";
+        echo "Waiting for Spring Boot...";
+        until curl -s -f http://task-manager-1:8080/actuator/health > /dev/null; do
+          echo "Still waiting...";
           sleep 2;
         done;
-        echo "Backend is up — starting nginx";
-        nginx -g "daemon off;"
+        echo "Spring Boot is up. Starting NGINX...";
+        nginx -g "daemon off;";
       '
     ports:
       - "9090:80"

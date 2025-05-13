@@ -14,3 +14,9 @@ spring:
       ddl-auto: {DDL_AUTO_MODE}
 server:
   port: ${MANAGER_PORT}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

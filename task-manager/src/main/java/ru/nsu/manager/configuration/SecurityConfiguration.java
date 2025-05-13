@@ -29,6 +29,7 @@ public class SecurityConfiguration {
         Path.AUTH_REGISTER_ENDPOINT,
         Path.AUTH_LOGIN_ENDPOINT,
         Path.AUTH_RECOVERY_INITIALIZATION_ENDPOINT,
+        Path.ACTUATOR
     };
 
     private final ShortTtlJwtAuthenticationFilter shortTtlJwtAuthenticationFilter;
