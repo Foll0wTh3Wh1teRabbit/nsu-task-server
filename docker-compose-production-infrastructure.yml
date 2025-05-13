@@ -6,6 +6,7 @@ services:
     image: nginx
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    entrypoint: ["/dockerize", "-wait", "tcp://task-manager-1:8080", "-timeout", "30s", "nginx", "-g", "daemon off;"]
     ports:
       - "9090:80"
     env_file:
