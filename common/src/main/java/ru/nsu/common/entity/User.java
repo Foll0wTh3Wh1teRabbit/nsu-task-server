@@ -49,6 +49,9 @@ public class User implements UserDetails {
     @Column(name = "status", nullable = false)
     private UserStatus status;
 
+    @Column(name = "is_push_allowed")
+    private Boolean isPushAllowed;
+
     @OneToMany()
     private Set<PushToken> pushTokens;
 
@@ -60,7 +63,7 @@ public class User implements UserDetails {
     public void initDefaultProject() {
         String defaultProjectName = "Список задач";
 
-        this.projects
+
     }
 
 
